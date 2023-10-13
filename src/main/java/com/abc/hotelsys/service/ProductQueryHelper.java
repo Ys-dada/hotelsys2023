@@ -12,7 +12,6 @@ import lombok.Data;
  */
 @Data
 public class ProductQueryHelper extends ValueObject {
-
     private String qryProductType;
 
 }

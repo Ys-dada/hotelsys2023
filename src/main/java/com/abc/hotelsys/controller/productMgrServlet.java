@@ -46,6 +46,7 @@ public class productMgrServlet extends ViewBaseServlet {
             ProductService productService=new ProductServiceImpl();
 
             ProductQueryHelper helper=new ProductQueryHelper();
+
             if(StringUtils.isNotEmpty(request.getParameter("qryProductType")))
                 helper.setQryProductType(request.getParameter("qryProductType"));
 
