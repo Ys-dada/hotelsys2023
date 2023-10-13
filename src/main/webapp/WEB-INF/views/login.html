@@ -6,7 +6,29 @@
     <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
     <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
     <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+    <script>
+        function loadButton() {
+            var button = document.querySelector("input[type='submit']");
+            button.value = "登录中...";
+            setTimeout(function() {
+                button.innerHTML = '            <button className="btn btn-primary" type="button" disable>\n' +
+                    '                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>\n' +
+                    '                登录中...\n' +
+                    '            </button>';
+            }, 3000);
+
+            // 执行表单的提交操作
+        }
+    </script>
+
+
 </head>
+
+
+
+
+
+
 <body>
 
 <div class="container">
@@ -28,8 +50,9 @@
             <div class="alert alert-danger text-center" th:if="${errMsg} ne null" th:text="${errMsg}">
             </div>
             <div>
-                <input type="submit" class="btn btn-primary" value="系 统 登 录">
+                <input type="submit" class="btn btn-primary" value="系 统 登 录" onclick="loadButton()">
             </div>
+
         </form>
 
     </div>
