@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+  <nav th:fragment="menubar" class="navbar navbar-expand-md navbar-light bg-light">
+    <script th:inline="javascript">
+      function logout(){
+        if(confirm('您确认要退出系统吗?'))
+          location.href="/securityMgr?task=logout";
+      }
+    </script>
+    <a class="navbar-brand" href="#"><b>酒店房间管理系统</b></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">首页</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            分店管理
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" th:href='@{/hotelMgr?task=toInput}'>新开分店</a>
+            <a class="dropdown-item" th:href='@{/hotelMgr?task=loadHotels}'>分店列表</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            房间管理
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" th:href='@{/roomMgr?task=toInput}'>房间登记</a>
+            <a class="dropdown-item" th:href='@{/roomMgr?task=loadRooms}'>房间列表</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            商品管理
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" th:href='@{/productMgr?task=toInput}'>增加商品</a>
+            <a class="dropdown-item" th:href='@{/productMgr?task=loadProducts}'>商品列表</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            系统维护
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" th:href='@{/userMgr?task=toInput}'>新增操作员</a>
+            <a class="dropdown-item" th:href='@{/userMgr?task=loadUsers}'>操作员管理</a>
+          </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link">
+            <i class="fas fa-user" style="color:deeppink"><span th:text="${session.loginedUser.userName}"></span></i>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="javascript:logout();">退出系统</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div th:fragment="footer">
+    <hr class="my-3">
+    <div class="text-center" th:utext="${application.footerHtml}"></div>
+    <br>
+  </div>
+
+</body>
+</html>

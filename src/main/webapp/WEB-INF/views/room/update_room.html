@@ -1,0 +1,117 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+</head>
+<body>
+
+    <div th:insert="/common/commonpage::menubar"></div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="border-radius:0em">
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item">房间管理</li>
+            <li class="breadcrumb-item active">修改房间</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form th:action="@{/roomMgr}" method="post">
+                    <input type="hidden" name="task" value="update">
+                    <input type="hidden" name="roomId" th:value="${room.roomId}">
+                    <div class="form-group">
+                        <label>房间编号</label>
+                        <input type="text" class="form-control" placeholder="请输入房间的编号" name="roomNo" length="30" th:value="${room.roomNo}">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">所属分店</label>
+                        <select class="form-control" name="hotelid">
+                            <option value="">-请选择-</option>
+                            <option th:each="hotel:${hotelList}" th:value="${hotel.hotelId}" th:text="${hotel.hotelName}" th:selected="${room.hotel.getHotelName} eq ${hotel.getHotelName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>房间类型</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="a" th:checked="${room.roomType} eq 'a'">
+                            <label class="form-check-label">单人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="b" th:checked="${room.roomType} eq 'b'">
+                            <label class="form-check-label">双人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="c" th:checked="${room.roomType} eq 'c'">
+                            <label class="form-check-label">三人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="d" th:checked="${room.roomType} eq 'd'">
+                            <label class="form-check-label">贵宾套房</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="e" th:checked="${room.roomType} eq 'e'">
+                            <label class="form-check-label">豪华商务房</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>屋内设施	</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="a" th:checked="${#strings.indexOf(room.roomEquipStr,'a')>=0}">
+                            <label class="form-check-label">大屏液晶</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="b" th:checked="${#strings.indexOf(room.roomEquipStr,'b')>=0}">
+                            <label class="form-check-label">中央空调</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="c" th:checked="${#strings.indexOf(room.roomEquipStr,'c')>=0}">
+                            <label class="form-check-label">高级卫浴</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="d" th:checked="${#strings.indexOf(room.roomEquipStr,'d')>=0}">
+                            <label class="form-check-label">互联网接入</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="e" th:checked="${#strings.indexOf(room.roomEquipStr,'e')>=0}">
+                            <label class="form-check-label">冲浪浴缸</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="f" th:checked="${#strings.indexOf(room.roomEquipStr,'f')>=0}">
+                            <label class="form-check-label">卫星电视</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="g" th:checked="${#strings.indexOf(room.roomEquipStr,'g')>=0}">
+                            <label class="form-check-label">冰箱</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">房间状态</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="roomStatus">
+                            <option value="">-请选择-</option>
+                            <option value="a" th:selected="${#strings.indexOf(room.roomStatus,'a')}>=0">空置房间</option>
+                            <option value="b" th:selected="${#strings.indexOf(room.roomStatus,'b')}>=0">已预订</option>
+                            <option value="c" th:selected="${#strings.indexOf(room.roomStatus,'c')}>=0">退房保洁中</option>
+                            <option value="d" th:selected="${#strings.indexOf(room.roomStatus,'d')}>=0">整理维修</option>
+                            <option value="e" th:selected="${#strings.indexOf(room.roomStatus,'e')}>=0">已入住</option>
+                            <option value="f" th:selected="${#strings.indexOf(room.roomStatus,'f')}>=0">未保洁</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea name="roomMemo" rows="3" cols="50" class="form-control" placeholder="说明房间额外信息" th:text="${room.roomMemo}"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="修改房间">
+                </form>
+            </div>
+        </div>
+
+        <div th:insert="/common/commonpage::footer"></div>
+    </div>
+</body>
+</html>

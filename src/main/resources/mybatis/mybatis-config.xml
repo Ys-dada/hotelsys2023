@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<configuration>
+
+   <!-- 
+    导入和关联数据库信息存储的属性文件
+    -->
+  <properties resource="database/db.properties"></properties>
+    
+  <settings>
+	<setting name="mapUnderscoreToCamelCase" value="true"/>
+    <setting name="logImpl" value="STDOUT_LOGGING" />
+  </settings>  
+  
+  <typeAliases>
+    <package name="com.abc.hotelsys.domain"/>
+  </typeAliases>
+  
+  <!-- 多种数据库环境  -->
+  <environments default="mysql-dev">
+    
+    <environment id="mysql-dev">
+      <transactionManager type="JDBC"/>
+      <!-- 数据源其实本质上就是连接池，一个存储结构，内部放了很多连接对象 -->
+      <dataSource type="POOLED">
+        <property name="driver" value="${mysql.driver}"/>
+        <property name="url" value="${mysql.url}"/>
+        <property name="username" value="${mysql.username}"/>
+        <property name="password" value="${mysql.password}"/>
+      </dataSource>
+    </environment>   
+    
+  </environments> 
+  
+  <databaseIdProvider type="DB_VENDOR">
+		<!-- 为不同的数据库厂商起别名, mybatis会识别不同数据库的驱动程序的入口点的类名，从而识别不同的环境 -->
+		<property name="MySQL" value="mysql"/>
+		<property name="Oracle" value="oracle"/>
+		<property name="SQL Server" value="sqlserver"/>
+  </databaseIdProvider>
+  
+  <!-- 
+    orm： object-rational mapping
+    mybatis,hibernate (orm mapping tools)
+   -->
+  <mappers>
+    <mapper resource="mybatis/mapper/HotelMapper.xml"/>
+    <mapper resource="mybatis/mapper/RoomMapper.xml"/>
+    <mapper resource="mybatis/mapper/UserMapper.xml"/>
+    <mapper resource="mybatis/mapper/ProductMapper.xml"/>
+  </mappers>
+  
+</configuration>

@@ -1,0 +1,9 @@
+1. 图片的存储
+  a.上传到服务器特定的目录下，然后把路径地址保存到对应的数据库字段（varchar）
+  b.直接上传到数据库，保存在数据库的blob字段中。 (blob: binary large object)
+
+2. blob字段在mysql中有好几种类型：
+   a. tinyblob
+   b. blob
+   c. mediumblob (16M)
+   d. longblob

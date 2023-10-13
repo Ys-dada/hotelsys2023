@@ -1,0 +1,31 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+</head>
+<body>
+
+    <div th:insert="/common/commonpage::menubar"></div>
+
+    <div class="container my-2">
+        <div class="row py-5">
+            <div class="jumbotron">
+                <h1 class="display-4">欢迎来到ABC酒店管理</h1>
+                <p class="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
+                <hr class="my-4">
+                <a class="btn btn-primary btn-lg col-md-3 mx-2" th:href='@{/hotelMgr?task=loadHotels}'>分店管理</a>
+                <a class="btn btn-success btn-lg col-md-3 mx-2" th:href='@{/userMgr?task=loadUsers}'>员工管理</a>
+                <a class="btn btn-info btn-lg col-md-3 mx-2" th:href='@{/roomMgr?task=loadRooms}'>房间管理</a>
+            </div>
+        </div>
+
+        <div th:insert="/common/commonpage::footer"></div>
+
+    </div>
+
+</body>
+</html>

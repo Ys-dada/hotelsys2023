@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    一个映射文件了说明如何对一个对象存储、读取、修改和删除，主要提供了若干条映射条目以及相关的SQL语句。
+   每个mapper的namespace类似于一个唯一标识符，是内部的映射条目的归属范围
+ 
+   一个映射条目主要就是为了某个dao方法服务的，所以其id一般也设置为和dao方法名保持一致。  
+   
+-->
+<mapper namespace="mybatis.mapper.RoomMapper">
+
+    <insert id="addRoom" parameterType="Room">
+        insert into tbl_rooms(room_no,room_type,room_equip,room_status,room_memo,hotel_id)
+        values(#{roomNo},#{roomType},#{roomEquipStr},#{roomStatus},#{roomMemo},#{hotel.hotelId})
+    </insert>
+
+    <select id="getRoomById" parameterType="java.lang.Integer" resultMap="RoomResult">
+        select *
+        from tbl_rooms a inner join tbl_hotels b
+        on a.hotel_id=b.hotel_id and  a.room_id=#{roomId}
+    </select>
+
+    <select id="loadRooms"  resultMap="RoomResult">
+        select *
+        from tbl_rooms a inner join tbl_hotels b
+        on a.hotel_id=b.hotel_id
+    </select>
+
+    <select id="loadRoomsByHelper" resultMap="RoomResult" parameterType="com.abc.hotelsys.service.RoomQueryHelper">
+        select *
+        from tbl_rooms a, tbl_hotels b
+        where a. hotel_id=b.hotel_id
+        <if test="qryHotelNo!=null">
+            AND a.hotel_id=#{qryHotelNo}
+        </if>
+        <if test="qryRoomStatus!=null and qryRoomStatus.length()!=0">
+            AND room_status=#{qryRoomStatus}
+        </if>
+        <if test="qryRoomType!=null and qryRoomType.length()!=0">
+            AND room_type=#{qryRoomType}
+        </if>
+        order by a.room_id desc;
+    </select>
+
+    <select id="cntRooms" parameterType="com.abc.hotelsys.service.RoomQueryHelper" resultType="java.lang.Integer">
+        select count(*) totalCnt
+        from tbl_rooms a, tbl_hotels b
+        where a. hotel_id=b.hotel_id
+        <if test="qryHotelNo!=null">
+            AND a.hotel_id=#{qryHotelNo}
+        </if>
+        <if test="qryRoomStatus!=null and qryRoomStatus.length()!=0">
+            AND room_status=#{qryRoomStatus}
+        </if>
+        <if test="qryRoomType!=null and qryRoomType.length()!=0">
+            AND room_type=#{qryRoomType}
+        </if>
+    </select>
+
+    <select id="getScopedRooms"  parameterType="java.util.Map" resultMap="RoomResult">
+        select *
+        from tbl_rooms a, tbl_hotels b
+        where a. hotel_id=b.hotel_id
+        <if test="helper.qryHotelNo!=null">
+            AND a.hotel_id=#{helper.qryHotelNo}
+        </if>
+        <if test="helper.qryRoomStatus!=null and helper.qryRoomStatus.length()!=0">
+            AND room_status=#{helper.qryRoomStatus}
+        </if>
+        <if test="helper.qryRoomType!=null and helper.qryRoomType.length()!=0">
+            AND room_type=#{helper.qryRoomType}
+        </if>
+        order by a.room_id desc
+        limit #{start},#{size}
+    </select>
+
+    <delete id="delRoom" parameterType="java.lang.Integer">
+        delete from tbl_rooms where room_id=#{roomId}
+    </delete>
+
+    <update id="updateRoom" parameterType="Room">
+        update tbl_rooms set
+        room_no=#{roomNo},room_type=#{roomType},room_equip=#{roomEquipStr},room_status=#{roomStatus},room_memo=#{roomMemo},hotel_id=#{hotel.hotelId}
+        where room_id=#{roomId}
+    </update>
+    <resultMap type="Room" id="RoomResult">
+        <id column="room_id" property="roomId"/>
+        <result column="room_no" property="roomNo"/>
+        <result column="room_status" property="roomStatus"/>
+        <result column="room_equip" property="roomEquipStr"/>
+        <result column="room_type" property="roomType"/>
+        <result column="room_memo" property="roomMemo"/>
+        <association property="hotel" javaType="Hotel">
+            <id column="hotel_id" property="hotelId"/>
+            <result column="hotel_name" property="hotelName"/>
+        </association>
+    </resultMap>
+</mapper>

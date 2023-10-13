@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hotelsys2023:war2">
+    <output-path>$PROJECT_DIR$/out/artifacts/hotelsys2023_war2</output-path>
+    <root id="archive" name="hotelsys2023_war.war">
+      <element id="artifact" artifact-name="hotelsys2023:war exploded" />
+    </root>
+  </artifact>
+</component>

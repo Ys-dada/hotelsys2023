@@ -1,0 +1,116 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+</head>
+<body>
+
+    <div th:insert="/common/commonpage::menubar"></div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="border-radius:0em">
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item">房间管理</li>
+            <li class="breadcrumb-item active">新增房间</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form th:action="@{/roomMgr}" method="post">
+                    <input type="hidden" name="task" value="create">
+                    <div class="form-group">
+                        <label>房间编号</label>
+                        <input type="text" class="form-control" placeholder="请输入房间的编号" name="roomNo" length="30" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">所属分店</label>
+                        <select class="form-control" name="hotelid">
+                            <option value="">-请选择-</option>
+                            <option th:each="hotel:${hotelList}" th:value="${hotel.hotelId}" th:text="${hotel.hotelName}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>房间类型</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="a">
+                            <label class="form-check-label">单人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="b">
+                            <label class="form-check-label">双人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="c">
+                            <label class="form-check-label">三人间</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="d">
+                            <label class="form-check-label">贵宾套房</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="roomType" value="e">
+                            <label class="form-check-label">豪华商务房</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>屋内设施	</label><br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="a">
+                            <label class="form-check-label">大屏液晶</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="b">
+                            <label class="form-check-label">中央空调</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="c">
+                            <label class="form-check-label">高级卫浴</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="d">
+                            <label class="form-check-label">互联网接入</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="e">
+                            <label class="form-check-label">冲浪浴缸</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="f">
+                            <label class="form-check-label">卫星电视</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" name="roomEquip" value="g">
+                            <label class="form-check-label">冰箱</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">房间状态</label>
+                        <select class="form-control" id="exampleFormControlSelect1" name="roomStatus">
+                            <option value="">-请选择-</option>
+                            <option value="a">空置房间</option>
+                            <option value="b">已预订</option>
+                            <option value="c">退房保洁中</option>
+                            <option value="d">整理维修</option>
+                            <option value="e">已入住</option>
+                            <option value="f">未保洁</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注说明</label>
+                        <textarea name="roomMemo" rows="3" cols="50" class="form-control" placeholder="说明房间额外信息"></textarea>
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="新建房间">
+                </form>
+            </div>
+        </div>
+
+        <div th:insert="/common/commonpage::footer"></div>
+    </div>
+</body>
+</html>

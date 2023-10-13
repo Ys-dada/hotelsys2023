@@ -1,0 +1,25 @@
+-- --分店信息
+-- create table tbl_hotels(
+--                            hotel_id    int  primary key auto_increment,
+--                            hotel_name  varchar(50) not null,
+--                            hotel_addr  varchar(100) not null,
+--                            hotel_phone varchar(20) not null,
+--                            hotel_room_count  int  default 0,
+--                            hotel_pic  mediumblob
+-- );
+--
+-- -- 对已经存在的tbl_hotels表增加图片存储字段
+alter table tbl_hotels add hotel_pic mediumblob;
+
+-- --房间信息
+-- create table tbl_rooms(
+--                           room_id    int primary key auto_increment,
+--                           room_no    varchar(20) not null,
+--                           room_type  char(1) not null,
+--                           room_equip varchar(20) not null,
+--                           room_status char(1) not null,
+--                           room_memo  varchar(200),
+--                           hotel_id   int  not null,
+--                           constraint UK_HOTEL_ROOM UNIQUE (room_no,hotel_id),
+--                           constraint FK_HOTEL_ROOM FOREIGN KEY (hotel_id) references tbl_hotels(hotel_id)
+-- );

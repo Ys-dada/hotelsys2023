@@ -1,0 +1,199 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+    <script th:inline="javascript">
+
+        var rid=-1;
+        function update_room(roomid){
+             location.href=[[@{/roomMgr}]]+"?task=preUpdate&roomid="+roomid;
+        }
+
+        function show_remove_dialog(roomNo,roomId){
+             rid=roomId;
+             $("#promptMsg").text(`您确认要删除[${roomNo}]房间的资料信息吗?`)
+             $("#removeRoomModal").modal('show');
+        }
+
+        function remove_room(){
+             location.href=[[@{/roomMgr}]]+"?task=delete&roomId="+rid;
+        }
+            function doQuery(pageNo){
+
+
+                if(pageNo<1 || pageNo>[[${page.totalPageNum}]])
+                {
+                    alert('页号超出范围，有效范围：1-[[${page.totalPageNum}]]');
+                    $('#pageNo').select();
+                    return;
+                }
+                else{
+                    document.forms["qryFrm"].pageno.value=pageNo;
+                    document.forms["qryFrm"].submit();
+                }
+
+            }
+    </script>
+    <style>
+        .equipDesc{
+            display: inline;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div th:insert="/common/commonpage::menubar"></div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="border-radius:0em">
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item">房间管理</li>
+            <li class="breadcrumb-item active">房间列表</li>
+        </ol>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div id="queryArea">
+                    <form name="qryFrm" th:action="@{/roomMgr}" method="post">
+                        <input type="hidden" name="task" value="loadRooms"/>
+                        <input type="hidden" name="pageno" value="1"/>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <select name="qryHotelId" class="form-control">
+                                    <option value="">-请选择所属分店-</option>
+                                    <option th:each="hotel:${hotelList}" th:value="${hotel.hotelId}" th:text="${hotel.hotelName}" th:selected="${helper.qryHotelNo} eq ${hotel.hotelId}"></option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <select id="roomType" name="qryRoomType" class="form-control">
+                                    <option value="">-请选择房间类型-</option>
+                                    <option value="a" th:selected="${helper.qryRoomType} eq 'a'">单人间</option>
+                                    <option value="b" th:selected="${helper.qryRoomType} eq 'b'">双人间</option>
+                                    <option value="c" th:selected="${helper.qryRoomType} eq 'c'">三人间</option>
+                                    <option value="d" th:selected="${helper.qryRoomType} eq 'd'">贵宾套房</option>
+                                    <option value="e" th:selected="${helper.qryRoomType} eq 'e'">豪华商务房</option>
+                                </select>
+                            </div>
+                            </select>
+                            <div class="form-group col-md-3">
+                                <select name="qryRoomStatus" class="form-control">
+                                    <option value="">-请选择房间状态-</option>
+                                    <option value="a" th:selected="${helper.qryRoomStatus} eq 'a'">空置房间</option>
+                                    <option value="b" th:selected="${helper.qryRoomStatus} eq 'b'">已预订</option>
+                                    <option value="c" th:selected="${helper.qryRoomStatus} eq 'c'">退房保洁中</option>
+                                    <option value="d" th:selected="${helper.qryRoomStatus} eq 'd'">整理维修</option>
+                                    <option value="e" th:selected="${helper.qryRoomStatus} eq 'e'">已入住</option>
+                                    <option value="f" th:selected="${helper.qryRoomStatus} eq 'f'">未保洁</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <button class="btn btn-primary"> 查询房间 </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-primary col-6 offset-3 text-center my-3" role="alert" th:if="${#lists.isEmpty(page.pageContent)}">
+                    <div class="my-2">没有符合查询要求的酒店房间信息被找到!</div>
+                </div>
+                <div th:if="${#lists.size(page.pageContent)} gt 0">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">序号</th>
+                            <th scope="col">房间编号</th>
+                            <th scope="col">所属分店</th>
+                            <th scope="col">房间类型</th>
+                            <th scope="col">屋内设施</th>
+                            <th scope="col">房间状态</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="room:${page.pageContent}">
+                        <th scope="row" th:text="${room.roomId}"></th>
+                        <td th:text="${room.roomNo}"></td>
+                        <td th:text="${room.hotel.hotelName}"></td>
+                        <td>
+                            <span th:if="${room.roomType} eq 'a'">单人间</span>
+                            <span th:if="${room.roomType} eq 'b'">双人间</span>
+                            <span th:if="${room.roomType} eq 'c'">三人间</span>
+                            <span th:if="${room.roomType} eq 'd'">贵宾套房</span>
+                            <span th:if="${room.roomType} eq 'e'">豪华商务房</span>
+                        </td>
+                        <td>
+                            <div class="equipDesc" th:each="equip : ${room.roomEquip}" th:switch="${equip}">
+                                <span th:case="a">大屏液晶</span>
+                                <span th:case="b">中央空调</span>
+                                <span th:case="c">高级卫浴</span>
+                                <span th:case="d">互联网接入</span>
+                                <span th:case="e">冲浪浴缸</span>
+                                <span th:case="f">卫星电视</span>
+                                <span th:case="g">冰箱</span>
+                            </div>
+                        </td>
+                        <td th:switch="${room.roomStatus}">
+                            <span th:case="a">空置房间</span>
+                            <span th:case="b">已预订</span>
+                            <span th:case="c">退房保洁中</span>
+                            <span th:case="d">整理维修</span>
+                            <span th:case="e">已入住</span>
+                            <span th:case="f">未保洁</span>
+                        </td>
+                            <td>
+                                <button class="btn btn-primary btn-sm " th:onclick="update_room([[${room.roomId}]])">修改</button>
+                                <button class="btn btn-danger btn-sm ml-1 " th:onclick="show_remove_dialog([[${room.roomNo}]],[[${room.roomId}]])">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                    <div class="col-12 text-right">
+                        共<span th:text="${page.totalRecNum}"></span>条,
+                        当前显示<span th:text="${page.startIndex+1}"></span>-<span th:text="${page.endIndex}"></span>条
+                        第<span th:text="${page.pageNo}"></span>/<span th:text="${page.totalPageNum}"></span>页
+                        &nbsp;|&nbsp;
+                        <button th:if="${page.pageNo>1}" class="btn btn-sm btn-outline-info" onclick="doQuery(1)">首页</button>&nbsp;
+                        <button th:if="${page.prePage}" class="btn btn-sm btn-outline-info" th:onclick="doQuery([[${page.pageNo-1}]])">上一页</button>&nbsp;
+                        <button th:if="${page.nextPage}" class="btn btn-sm btn-outline-info" th:onclick="doQuery([[${page.pageNo+1}]])">下一页</button>&nbsp;
+                        <button th:if="${page.pageNo!=page.totalPageNum}" class="btn btn-sm btn-outline-info" th:onclick="doQuery([[${page.totalPageNum}]])">末页</button>&nbsp;
+                        &nbsp;|&nbsp;
+                        到<input type="text" class="text-center mx-2" id="pageNo" size=4 style="text-align:right;" onkeypress="onlynumber();"/>页
+                        <button class="btn btn-sm btn-success" onclick="doQuery(parseInt($('#pageNo').val()));"> 跳 转 </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="removeRoomModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">操作提示</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="promptMsg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="remove_room()">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+        <div th:insert="/common/commonpage::footer"></div>
+</body>
+</html>

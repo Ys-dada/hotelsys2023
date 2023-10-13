@@ -1,0 +1,84 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+    <script th:inline="javascript">
+
+        function previewImage(file){
+
+            var img = document.getElementById('picImg');
+
+            if (file.files && file.files[0])
+            {
+
+                //准备一个文件读取器对象，并告诉它文件读取完毕之后要做什么。
+                var reader = new FileReader();
+                //成功读取了图片信息后，把读取结果赋予
+
+                //FileReader.readAsDataURL()
+                //开始读取指定的Blob中的内容。一旦完成，result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容。
+                reader.onload = function(evt){
+                    img.src= evt.target.result;
+                    console.log("read ok! img src get value!"+evt.target.result);
+                }
+
+                console.log("start to read!")
+                reader.readAsDataURL(file.files[0]);
+
+            } else{
+                img.src=[[@{/pics/no-pic.jpg}]];
+                // alert("no upload file!");
+            }
+
+        }
+
+    </script>
+</head>
+<body>
+
+    <div th:insert="/common/commonpage::menubar"></div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="border-radius:0em">
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item">分店管理</li>
+            <li class="breadcrumb-item active">分店信息修改</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <form action="hotelMgr" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="task" value="update">
+                    <input type="hidden" name="hotelid" th:value="${hotel.hotelId}">
+                    <input type="hidden" name="hotelroomcount" th:value="${hotel.hotelRoomCount}">
+                    <div class="form-group">
+                        <label>分店名称</label>
+                        <input name="hotelname" class="form-control" placeholder="请输入分店名称信息" th:value="${hotel.hotelName}">
+                    </div>
+                    <div class="form-group">
+                        <label>分店照片</label><br>
+                        <img id="picImg" th:src="@{/hotelMgr(task='getpic',hotelid=${hotel.hotelId})}" width="200" height="130" class="my-1"><br>
+                        <input type="file" name="hotelpic" class="form-control-file" onchange="previewImage(this);">
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelAddr">分店地址</label>
+                        <input name="hoteladdr" class="form-control" placeholder="请输入分店地址信息" th:value="${hotel.hotelAddr}">
+                    </div>
+                    <div class="form-group">
+                        <label for="hotelPhone">联络电话</label>
+                        <input name="hotelphone" class="form-control" placeholder="请输入分店座机或手机联络信息" th:value="${hotel.hotelPhone}">
+                    </div>
+                    <input type="submit" class="btn btn-primary" value="修改分店">
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:insert="/common/commonpage::footer"></div>
+</body>
+</html>

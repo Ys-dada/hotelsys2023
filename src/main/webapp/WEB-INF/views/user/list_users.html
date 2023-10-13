@@ -1,0 +1,85 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/vendor/bootstrap-4.3.1-dist/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/vendor/fontawesome-free-5.8.1-web/css/all.css}">
+    <script th:src="@{/vendor/popper.js/popper.min.js}"></script>
+    <script th:src="@{/vendor/jquery/jquery-3.3.1.js}"></script>
+    <script th:src="@{/vendor/bootstrap-4.3.1-dist/js/bootstrap.js}"></script>
+    <script th:inline="javascript">
+        var uNo=-1;
+        function update_user(userNo){
+             location.href=[[@{/userMgr}]]+"?task=preUpdate&userNo="+userNo;
+        }
+
+        function show_remove_dialog(userName,userNo){
+           uNo=userNo;
+            $("#promptMsg").text(`您确认要删除 [${userName}] 的资料信息吗?`)
+             $("#removeHotelModal").modal('show');
+        }
+
+        function remove_user(){
+                 location.href=[[@{/userMgr}]]+"?task=delete&userNo="+uNo;
+        }
+    </script>
+</head>
+<body>
+
+   <div th:insert="/common/commonpage::menubar"></div>
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="border-radius:0em">
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item">操作员管理</li>
+            <li class="breadcrumb-item active">操作员列表</li>
+        </ol>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">登录编号</th>
+                            <th scope="col">真实姓名</th>
+                            <th scope="col">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user:${userList}">
+                            <th scope="row" th:text="${user.userNo}">1</th>
+                            <td th:text="${user.userName}"></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" th:onclick="update_user([[${user.userNo}]])">修改</button>
+                                <button class="btn btn-danger btn-sm ml-1" th:onclick="show_remove_dialog([[${user.userName}]],[[${user.userNo}]])">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="removeHotelModal" data-backdrop="static" data-keyboard="false" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">操作提示</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="promptMsg">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="remove_user()">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
